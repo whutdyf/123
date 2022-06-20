@@ -1,18 +1,16 @@
 package com.example.gamehouse;
 
-import com.example.gamehouse.Entity.House;
-import com.example.gamehouse.Entity.UserInformation;
+import com.example.gamehouse.Entity.*;
 import com.example.gamehouse.response.ResponseResult;
 import com.example.gamehouse.response.ResponseResultFactory;
-import com.example.gamehouse.service.IHouseService;
-import com.example.gamehouse.service.IItemService;
-import com.example.gamehouse.service.IUserInformationService;
-import com.example.gamehouse.service.IUserService;
+import com.example.gamehouse.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.example.gamehouse.Entity.User;
-import com.example.gamehouse.Entity.Item;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Base64;
 
 @SpringBootTest
 class GameHouseApplicationTests {
@@ -28,6 +26,9 @@ class GameHouseApplicationTests {
 
     @Autowired
     IUserInformationService iUserInformationService;
+
+    @Autowired
+    ItemPictureService itemPictureService;
 
     @Test
     void contextLoads() {
@@ -77,6 +78,23 @@ class GameHouseApplicationTests {
         userInformation.setCoordinatesY(20);
         userInformation.setBear(50);
         iUserInformationService.addUserInformation(userInformation);
+    }
+
+    @Test
+    void itemPicture() throws Exception{
+
+        File file = new File("/Users/seishunbukyoku/Desktop/garbage.png");
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] data = new byte[inputStream.available()];
+        inputStream.read(data, 0, inputStream.available());
+
+        String code = Base64.getEncoder().encodeToString(data);
+
+        ItemPicture itemPicture = new ItemPicture();
+        itemPicture.setItemName("garbage");
+        itemPicture.setPicture(code);
+        itemPictureService.add(itemPicture);
+
     }
 
 }
